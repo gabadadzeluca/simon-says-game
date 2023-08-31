@@ -1,26 +1,28 @@
+import { useState } from "react";
+import { SGameBoardDiv } from "./GameBoard.styled";
 import { Button } from "../Button";
 
-const COLORS = ['blue', 'red', 'yellow', 'green', 'purple'];
+const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
 
-const generateSequence = (level:number) =>{
+const generateSequence = (level: number) => {
   let generatedArray = [];
-  for(let i = 0; i<level; i++){
-    const randomColor = COLORS[Math.floor(Math.random()*COLORS.length)]
+  for (let i = 0; i < level; i++) {
+    const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
     generatedArray.push(randomColor);
   }
-  console.log(generatedArray);
-}
+  return generatedArray;
+};
 
 export const GameBoard = () => {
-  generateSequence(5);
+  const [level, setLevel] = useState(1);
   return (
-    <>
-      {COLORS.map((color, index)=>(
+    <SGameBoardDiv>
+      {COLORS.map((color, index) => (
         <>
-          <Button color={color} key={index}/>
-          <br/>
+          <Button color={color} key={index} />
         </>
       ))}
-    </>
+    </SGameBoardDiv>
   );
-}
+};
+
