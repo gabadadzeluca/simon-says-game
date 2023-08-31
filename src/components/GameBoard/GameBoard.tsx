@@ -4,46 +4,36 @@ import { Button } from "../Button";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
 
-const generateSequence = (level: number):string[] => {
-  let generatedArray = [];
-  for (let i = 0; i < level; i++) {
-    const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-    generatedArray.push(randomColor);
-  }
-  return generatedArray;
-};
-
-const displaySequence = (sequence:string[]) =>{
-  sequence.map((color)=>{
-    console.log(color);
-    // light up the colors in order of sequence
-  })
-}
-
 export const GameBoard = () => {
   const [level, setLevel] = useState(1);
-  const [highlightIndex, setHighlightIndex] = useState(0);
-  const [sequence, setSequence ] = useState(generateSequence(level))
+  const [highlightIndex, setHighlightIndex] = useState(-1);
+  const [sequence, setSequence ] = useState<number[]>([]);
 
-  // const sequence = generateSequence(level);
-  console.log("sequence:",sequence);
+  console.log(sequence, "LEVEL:",level);
+  sequence.forEach(number=>{
+    console.log(COLORS[number]);
+  })
   
+  const displaySequence = () =>{
+    let randomIndex:number;
+    do {
+        randomIndex = Math.floor(Math.random() * COLORS.length);
+    } while (randomIndex === sequence[sequence.length - 1]);
+    setSequence((prevSequence)=>[...prevSequence, randomIndex]);
+  }
 
   useEffect(() => {
-    if (highlightIndex < sequence.length) {
-      const timeoutId = setTimeout(() => {
-        setHighlightIndex((prevIndex) => prevIndex + 1);
-      }, 2000);
+    const timeoutId = setTimeout(() => {
+      // setHighlightIndex((prevIndex) => prevIndex + 1);
+      displaySequence();
+    }, 3000);
 
-      return () => clearTimeout(timeoutId);
-    }
+    return () => clearTimeout(timeoutId);
   }, [highlightIndex, sequence]);
   useEffect(() => {
-    if (highlightIndex === sequence.length) {
-      // reset and move to the next level or action
-      setHighlightIndex(0);
+    if (sequence.length === level) {
+      setHighlightIndex(sequence[sequence.length - 1]);
       setLevel((prevLevel) => prevLevel + 1);
-      setSequence(generateSequence(level));
     }
   }, [highlightIndex, sequence, level]);
   return (
