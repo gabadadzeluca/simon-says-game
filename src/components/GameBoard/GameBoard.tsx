@@ -12,7 +12,8 @@ export const GameBoard = () => {
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
 
-  console.log(sequence, "LEVEL:", level, "USER SEQ:", userSequence);
+  console.log(sequence, "LEVEL:", level);
+  console.log("user's sequence:", userSequence);
   sequence.forEach((number) => {
     console.log(COLORS[number]);
   });
@@ -34,22 +35,6 @@ export const GameBoard = () => {
       // check sequence
     }
   } 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      generateSequence();
-    }, 3000);
-    return () => clearTimeout(timeoutId);
-  }, [highlightIndex, sequence]);
-
-  useEffect(() => {
-    console.log("TURNS:", turns[level - 1]);
-    if (sequence.length === turns[level]) {
-      setHighlightIndex(sequence[sequence.length - 1]);
-      // stop the loop HERE
-      setLevel((prevLevel) => prevLevel + 1);
-    }
-  }, [highlightIndex, sequence, level]);
-
   return (
     <SGameBoardDiv>
       {COLORS.map((color, index) => (
