@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SGameBoardDiv } from "./GameBoard.styled";
 import { Button } from "../Button";
 import useMount from "../../hooks/useMount";
+import { timeout } from "../../utils/timeout";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
 const turns = Array.from({ length: 25 }, (_, index) => index + 1);
 // array where each index is level and value is number of turns
-console.log(turns);
-
 
 export const GameBoard = () => {
   const [level, setLevel] = useState(1);
@@ -18,8 +17,11 @@ export const GameBoard = () => {
   sequence.forEach((number) => {
     console.log(COLORS[number]);
   });
+  console.log("SEQUENCE:",sequence);
+  console.log("LVL:", level);
 
   const generateSequence = () => {
+    console.log("S:",sequence.length, "T",turns[level-1])
     if (sequence.length >= turns[level-1]) {
       return;
     }
@@ -38,6 +40,30 @@ export const GameBoard = () => {
       // if inccorect stop the loop
     }
   } 
+
+
+  const displayColors = async () => {
+    console.log("DISPLAYING COLORS");
+    for(let i = 0; i<sequence.length; i++){
+      setHighlightIndex(sequence[i]);
+      await timeout(1000);
+      setHighlightIndex(-1);
+      await timeout(1600);
+    }
+  }
+
+  useEffect(()=>{
+    generateSequence();
+  }, [level]);
+
+  useMount(()=>{
+    console.log("SEQUENCEEEEE", sequence)
+    if (sequence.length > 0) {
+      displayColors();
+      console.log("updating level....")
+      setLevel(prevLevel=>prevLevel + 1);
+    }
+  }, [sequence]);
 
   return (
     <SGameBoardDiv>
