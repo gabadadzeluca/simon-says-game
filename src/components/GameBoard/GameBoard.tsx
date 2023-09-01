@@ -1,21 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { SGameBoardDiv } from "./GameBoard.styled";
 import { Button } from "../Button";
+import useMount from "../../hooks/useMount";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
 const turns = Array.from({ length: 25 }, (_, index) => index + 1);
 // array where each index is level and value is number of turns
+console.log(turns);
+
 
 export const GameBoard = () => {
   const [level, setLevel] = useState(1);
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
-  const [isUserTurn, setIsUserTurn] = useState(false);
-  const renderRef = useRef(false);
 
-  console.log(sequence, "LEVEL:", level);
-  console.log("user's sequence:", userSequence);
   sequence.forEach((number) => {
     console.log(COLORS[number]);
   });
@@ -35,22 +34,11 @@ export const GameBoard = () => {
     if(userSequence.length < sequence.length){
       setUserSequence(prevSequance=>[...prevSequance, index]);
       // check sequence
+      // if sequence correct do not do anything
+      // if inccorect stop the loop
     }
   } 
 
-
-  useEffect(()=>{
-    if(renderRef.current === false){
-      renderRef.current = true;
-      return;
-    }
-    if(!isUserTurn){
-      setTimeout(()=>{
-        generateSequence();
-        setHighlightIndex(sequence[sequence.length - 1])
-      }, 3000)
-    }
-  },[]) 
   return (
     <SGameBoardDiv>
       {COLORS.map((color, index) => (
