@@ -12,13 +12,12 @@ export const GameBoard = () => {
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
 
-
   console.log(sequence, "LEVEL:", level, "USER SEQ:", userSequence);
   sequence.forEach((number) => {
     console.log(COLORS[number]);
   });
 
-  const displaySequence = () => {
+  const generateSequence = () => {
     if (sequence.length >= turns[level-1]) {
       return;
     }
@@ -32,17 +31,18 @@ export const GameBoard = () => {
   const handleUserClick = (index:number) =>{
     if(userSequence.length < sequence.length){
       setUserSequence(prevSequance=>[...prevSequance, index]);
+      // check sequence
     }
   } 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      displaySequence();
+      generateSequence();
     }, 3000);
     return () => clearTimeout(timeoutId);
   }, [highlightIndex, sequence]);
 
   useEffect(() => {
-    console.log("TURNS TO BE PLAYED(IN THE ROUND):", turns[level - 1]);
+    console.log("TURNS:", turns[level - 1]);
     if (sequence.length === turns[level]) {
       setHighlightIndex(sequence[sequence.length - 1]);
       // stop the loop HERE
