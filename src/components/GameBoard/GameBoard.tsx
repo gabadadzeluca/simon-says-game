@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SGameBoardDiv } from "./GameBoard.styled";
 import { Button } from "../Button";
 
@@ -11,6 +11,8 @@ export const GameBoard = () => {
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
+  const [isUserTurn, setIsUserTurn] = useState(false);
+  const renderRef = useRef(false);
 
   console.log(sequence, "LEVEL:", level);
   console.log("user's sequence:", userSequence);
@@ -35,6 +37,20 @@ export const GameBoard = () => {
       // check sequence
     }
   } 
+
+
+  useEffect(()=>{
+    if(renderRef.current === false){
+      renderRef.current = true;
+      return;
+    }
+    if(!isUserTurn){
+      setTimeout(()=>{
+        generateSequence();
+        setHighlightIndex(sequence[sequence.length - 1])
+      }, 3000)
+    }
+  },[]) 
   return (
     <SGameBoardDiv>
       {COLORS.map((color, index) => (
