@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { SGameBoardDiv } from "./GameBoard.styled";
 import { Button } from "../Button";
-import useMount from "../../hooks/useMount";
 import { timeout } from "../../utils/timeout";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
@@ -13,13 +12,12 @@ export const GameBoard = () => {
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
-
-  sequence.forEach((number) => {
-    console.log(COLORS[number]);
-  });
+  const [isUserTurn, setIsUserTurn] = useState(false);
+ 
   console.log("SEQUENCE:",sequence);
   console.log("LVL:", level);
-
+  console.log("USER'S SEQUENCE:", userSequence);
+  console.log("USER's TURN:", isUserTurn);
   const generateSequence = () => {
     console.log("S:",sequence.length, "T",turns[level-1])
     if (sequence.length >= turns[level-1]) {
@@ -33,11 +31,18 @@ export const GameBoard = () => {
   };
 
   const handleUserClick = (index:number) =>{
-    if(userSequence.length < sequence.length){
-      setUserSequence(prevSequance=>[...prevSequance, index]);
-      // check sequence
-      // if sequence correct do not do anything
-      // if inccorect stop the loop
+    console.log(userSequence.length, sequence.length);
+    if(isUserTurn){
+      if(userSequence.length < sequence.length){
+        setUserSequence(prevSequance=>[...prevSequance, index]);
+        // check sequence
+        // if sequence correct do not do anything
+        // if inccorect stop the loop
+      }else if(userSequence.length === sequence.length){
+        setIsUserTurn(false);
+        setLevel(prevLevel=>prevLevel + 1);
+        // disable click;
+      }
     }
   } 
 
@@ -49,6 +54,9 @@ export const GameBoard = () => {
       await timeout(1000);
       setHighlightIndex(-1);
       await timeout(1600);
+      if(i === sequence.length-1){
+        setIsUserTurn(true);
+      }
     }
   }
 
@@ -56,7 +64,7 @@ export const GameBoard = () => {
     generateSequence();
   }, [level]);
 
-  useMount(()=>{
+  useEffect(()=>{
     console.log("SEQUENCEEEEE", sequence)
     if (sequence.length > 0) {
       displayColors();
