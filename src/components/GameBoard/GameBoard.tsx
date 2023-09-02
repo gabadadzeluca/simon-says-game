@@ -39,8 +39,9 @@ export const GameBoard = () => {
 
   const generateSequence = () => {
     const sequenceCopy = [...sequence];
-    console.log("TURNS PER LEVEL", turns[level - 1]);
-    for (let i = 0; i < turns[level - 1]; i++) {
+    const itemsToAdd = turns[level-1] - sequence.length;
+    console.log("ITEMS TO ADD:",itemsToAdd);
+    for (let i = 0; i < itemsToAdd; i++) {
       const randomIndex = getRandomIndex();
       sequenceCopy.push(randomIndex);
     }
