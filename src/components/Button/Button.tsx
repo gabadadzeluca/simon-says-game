@@ -27,7 +27,7 @@ const SDiv = styled.div<{ color: string; highlighted: boolean }>`
   border-radius: 1rem;
   cursor: pointer;
   &:hover {
-    border: 0.4rem solid #a78484;
+    outline: 0.4rem solid #a78484;
   }
   >div{
     width: inherit;
