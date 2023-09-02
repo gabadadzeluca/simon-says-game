@@ -17,8 +17,10 @@ export const Button = (props: {
   );
 };
 
-const SDiv = styled.button<{ color: string; highlighted: boolean }>`
+const SDiv = styled.div<{ color: string; highlighted: boolean }>`
   all: unset;
+  display: flex;
+  align-items: center;
   box-sizing: border-box;
   width: 20rem;
   height: 20rem;
@@ -28,9 +30,9 @@ const SDiv = styled.button<{ color: string; highlighted: boolean }>`
     border: 0.4rem solid #a78484;
   }
   >div{
-    background-color: ${({ color }) => color};
     width: inherit;
     height: inherit;
+    background-color: ${({ color }) => color};
     border-radius: inherit;
     opacity: ${({ highlighted }) => (highlighted ? "1" : "0.3")};
   }
