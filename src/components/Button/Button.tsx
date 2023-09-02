@@ -7,23 +7,33 @@ export const Button = (props: {
 }) => {
   const { color, highlighted, onClick } = props;
   return (
-    <SButton
+    <SDiv
       color={color}
       highlighted={highlighted}
       onClick={onClick}
-    ></SButton>
+    >
+     <div></div>  
+    </SDiv>
   );
 };
 
-const SButton = styled.button<{ color: string; highlighted: boolean }>`
+const SDiv = styled.div<{ color: string; highlighted: boolean }>`
   all: unset;
-  background-color: ${({ color }) => color};
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
   width: 20rem;
   height: 20rem;
   border-radius: 1rem;
   cursor: pointer;
-  opacity: ${({ highlighted }) => (highlighted ? "1" : "0.3")};
   &:hover {
-    opacity: 1;
+    outline: 0.4rem solid #a78484;
+  }
+  >div{
+    width: inherit;
+    height: inherit;
+    background-color: ${({ color }) => color};
+    border-radius: inherit;
+    opacity: ${({ highlighted }) => (highlighted ? "1" : "0.3")};
   }
 `;
