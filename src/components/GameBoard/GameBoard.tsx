@@ -63,6 +63,9 @@ export const GameBoard = () => {
         }
       } else {
         alert("END GAME");
+        setCanClick(false);
+        setLevel(1);
+        setSequence([]);
       }
     } else {
       return;
