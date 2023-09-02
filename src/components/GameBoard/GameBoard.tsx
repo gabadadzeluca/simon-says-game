@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SGameBoardDiv } from "./GameBoard.styled";
+import { SGameBoardDiv, SLevelP } from "./GameBoard.styled";
 import { Button } from "../Button";
 import { timeout } from "../../utils/timeout";
 
@@ -8,13 +8,13 @@ const turns = Array.from({ length: 5 }, (_, index) => index + 1);
 // array where each index is level and value is number of turns
 
 export const GameBoard = () => {
-  const [isUserTurn, setIsUserTurn] = useState(false);
-  const [score, setScore] = useState(0);
-  const [level, setLevel] = useState(3);
+  const [canClick, setCanClick] = useState(false);
+  const [level, setLevel] = useState(1);
   const [sequence, setSequence] = useState<number[]>([]);
-  const [userSequence, setUserSequence] = useState([]);
   const [highlightIndex, setHighlightIndex] = useState(-1);
-
+  const [sequenceCopy, setSequenceCopy] = useState([...sequence]);
+  console.log("LEVEL:",level);
+  console.log("SEQUENCE:", sequence);
   const getRandomIndex = () =>{
     let randomIndex: number;
     do {
@@ -24,8 +24,8 @@ export const GameBoard = () => {
   }
 
   const displaySequence = async () => {
+    setCanClick(false);
     for(let i=0; i<=sequence.length-1; i++){
-      console.log("INDEX:",sequence[i]);
       await timeout(2000);
       setHighlightIndex(sequence[i]);
       await timeout(2000);
@@ -33,28 +33,50 @@ export const GameBoard = () => {
     }
     console.log("FINISHED DISPLAYING LEVEL",level);
     // user's turn
-    setIsUserTurn(true);
+    setCanClick(true);
   }
 
   const generateSequence = () =>{
     const sequenceCopy = [...sequence];
-    for(let i = 0; i<level; i++){
+    console.log("TURNS PER LEVEL",turns[level-1]);
+    for(let i = 0; i<turns[level-1]; i++){
       const randomIndex = getRandomIndex();
-      console.log('adding random index', sequence, randomIndex );
       sequenceCopy.push(randomIndex);
-      console.log("SEQUENCE COPY:", sequenceCopy)
     }
     setSequence(sequenceCopy);
   }
-  
+
+  const handleUserClick = (index:number) =>{
+    const sequenceToGuess = [...sequenceCopy];
+    console.log("SEQUENCE TO GUESS",sequenceToGuess);
+    console.log(`CLICKED ON:${index}`)
+    if(canClick){
+      const expectedIndex = sequenceToGuess.shift();
+      setSequenceCopy(sequenceToGuess);
+      if(expectedIndex === index){
+        if(sequenceToGuess.length === 0){
+          console.log("START NEW ROUND")
+          setCanClick(false);
+          setLevel(prevLevel=>prevLevel + 1);
+          // start new round
+        }
+      }else{
+        alert("END GAME")
+      }
+    }else{
+      return;
+    }
+  }
+
   useEffect(()=>{
+    console.log("GENERATING...")
     generateSequence();
-  }, []);
+  }, [level]);
 
   useEffect(()=>{
     if(sequence.length > 0){
-      console.log("AAAA");
       displaySequence();
+      setSequenceCopy(sequence);
     }
   }, [sequence]);
 
@@ -65,11 +87,10 @@ export const GameBoard = () => {
           color={color}
           key={index}
           highlighted={highlightIndex === index}
-          // highlighted={false}
-          // onClick={()=>handleUserClick(index)}
-          onClick={()=>console.log(`CLICKED ${index}`)}
+          onClick={()=>handleUserClick(index)}
         />
       ))}
+      <SLevelP>{level}</SLevelP>
     </SGameBoardDiv>
   );
 };
