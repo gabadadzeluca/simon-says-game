@@ -8,7 +8,7 @@ const turns = Array.from({ length: 5 }, (_, index) => index + 1);
 // array where each index is level and value is number of turns
 
 export const GameBoard = () => {
-  const [isUserPlay, setIsUserPlay] = useState(false);
+  const [isUserTurn, setIsUserTurn] = useState(false);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(3);
   const [sequence, setSequence] = useState<number[]>([]);
@@ -31,6 +31,9 @@ export const GameBoard = () => {
       await timeout(2000);
       setHighlightIndex(-1);
     }
+    console.log("FINISHED DISPLAYING LEVEL",level);
+    // user's turn
+    setIsUserTurn(true);
   }
 
   const generateSequence = () =>{
@@ -44,7 +47,6 @@ export const GameBoard = () => {
     setSequence(sequenceCopy);
   }
   
-
   useEffect(()=>{
     generateSequence();
   }, []);
