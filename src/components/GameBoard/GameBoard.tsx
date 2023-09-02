@@ -4,7 +4,7 @@ import { Button } from "../Button";
 import { timeout } from "../../utils/timeout";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
-const turns = Array.from({ length: 5 }, (_, index) => index + 1);
+const turns = Array.from({ length: 20 }, (_, index) => index + 1);
 // array where each index is level and value is number of turns
 
 export const GameBoard = () => {
@@ -13,6 +13,7 @@ export const GameBoard = () => {
   const [sequence, setSequence] = useState<number[]>([]);
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [sequenceCopy, setSequenceCopy] = useState([...sequence]);
+  const time = level < 3 ? 1000 : 500;
   
   console.log("LEVEL:", level);
   console.log("SEQUENCE:", sequence);
@@ -27,9 +28,9 @@ export const GameBoard = () => {
   const displaySequence = async () => {
     setCanClick(false);
     for (let i = 0; i <= sequence.length - 1; i++) {
-      await timeout(2000);
+      await timeout(time);
       setHighlightIndex(sequence[i]);
-      await timeout(2000);
+      await timeout(time);
       setHighlightIndex(-1);
     }
     console.log("FINISHED DISPLAYING LEVEL", level);
