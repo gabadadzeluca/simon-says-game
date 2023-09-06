@@ -4,8 +4,6 @@ import { Button } from "../Button";
 import { timeout } from "../../utils/timeout";
 
 const COLORS = ["blue", "red", "yellow", "green", "purple", "cyan"];
-const turns = Array.from({ length: 20 }, (_, index) => index + 1);
-// array where each index is level and value is number of turns
 
 export const GameBoard = () => {
   const [canClick, setCanClick] = useState(false);
@@ -40,7 +38,7 @@ export const GameBoard = () => {
 
   const generateSequence = () => {
     const sequenceCopy = [...sequence];
-    const itemsToAdd = turns[level-1] - sequence.length;
+    const itemsToAdd = level - sequence.length;
     console.log("ITEMS TO ADD:",itemsToAdd);
     for (let i = 0; i < itemsToAdd; i++) {
       const randomIndex = getRandomIndex();
